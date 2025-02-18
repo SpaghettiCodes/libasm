@@ -4,10 +4,12 @@ extern __errno_location
 ft_write:
     mov rax, 1
     syscall
+    test eax, eax ; sets sign flag (sf) to 1 if eax is 0
     ret
 
 ; oookay so apparantly syscall does NOT set errno on error
 ; and we need to set it ourselves
+; if syscall failed, < 0 is returned, abs of this value is the errno to set
 
 error:
 
