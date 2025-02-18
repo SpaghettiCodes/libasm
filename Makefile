@@ -1,4 +1,4 @@
-asmfile = ft_strlen.s ft_strcpy.s ft_strcmp.s ft_write.s
+asmfile = ft_strlen.s ft_strcpy.s ft_strcmp.s ft_write.s ft_read.s ft_strdup.s
 
 asmout = $(patsubst %.s,%.o,$(asmfile))
 
@@ -10,12 +10,16 @@ outfile = out
 
 NASM = nasm
 
-NASM_FLAGS = -f elf64
+NASM_FLAGS = -f elf64 
 
 CC = gcc
 
-all: $(cout) $(asmout)
-	$(CC) $(cout) $(asmout) -o $(outfile)
+CC_FLAGS =
+
+all: program
+
+program: $(cout) $(asmout)
+	$(CC) $(CC_FLAGS) $(cout) $(asmout) -o $(outfile)
 
 %.o: %.s
 	$(NASM) $(NASM_FLAGS) $< -o $@
@@ -23,5 +27,10 @@ all: $(cout) $(asmout)
 %.o: %.c
 	$(CC) -c $< -o $@
 
+re: fclean all
+
 clean:
-	rm $(asmout) $(cout)
+	rm -f $(asmout) $(cout)
+
+fclean: clean
+	rm -f $(outfile)
