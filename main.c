@@ -53,7 +53,4 @@ int main() {
     char *malloced = ft_strdup("0123456789abcdefghijk lmnopqrsTUVWXYZ\0");
     printf("%s\n", ft_strcpy(malloced, "0123456789abcdefghijk lmnopqrsTUVWXYZ\0"));
     free(malloced);
-
-    // char *errorMalloc = malloc(-100);
-    // printf("%s\n", errorMalloc);
 }
