@@ -16,11 +16,12 @@ ft_write:
 ; r9 works, r11 does not work
 
 error:
-    mov rcx, rax
-    neg rcx
+    neg rax
+    push rax
     ; errno location returns the address of errno
     call __errno_location wrt ..plt
-    mov [rax], rcx 
+    pop rcx
+    mov [rax], rcx
     mov rax, -1
     ret
 

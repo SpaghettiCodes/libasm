@@ -2,29 +2,33 @@ global ft_strdup
 extern malloc
 extern ft_strlen
 extern ft_strcpy
+extern __errno_location
 
 ft_strdup:
-    call ft_strlen ; get string length of string
-
-    mov rdx, rax ; save length
-
-    ; get ready to call malloc
     ; save input string pointer
-    mov r8, rdi
+    push rdi
 
-    ; call malloc 
-    mov rdi, rdx
+    call ft_strlen ; get string length of string
+    inc rax ; null terminator
+
+    ; call malloc
+    mov rdi, rax
     call malloc wrt ..plt ; wanna check for error here, oops
-    
+
     ; rax now has the new malloced array
+    cmp rax, 0
+    je stop
+
+    ; get back input string pointer
+    pop rsi
 
     ; call ft_strcpy
     mov rdi, rax
-    mov rsi, r8
     call ft_strcpy
 
-    ; done
+stop:
     ret
+
 
 
 section .note.GNU-stack noalloc noexec nowrite progbits

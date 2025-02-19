@@ -7,7 +7,7 @@ ft_strlen:
 again:
     cmp byte [rdi + rax], 0
     je stop
-    add rax, 1
+    inc rax
     jmp again
 
 stop:
