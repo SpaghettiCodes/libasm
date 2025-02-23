@@ -69,9 +69,8 @@ loop:
   jmp loop
 
 reset:
-  mov r10, [r8 + 8]
   mov r9, r8
-  mov r8, r10
+  mov r8, [r8 + 8]
 
   jmp loop
 
