@@ -51,6 +51,7 @@ int main() {
     printf("%s\n", strerror(errno));
 
     char *malloced = ft_strdup("0123456789abcdefghijk lmnopqrsTUVWXYZ\0");
-    printf("%s\n", ft_strcpy(malloced, "0123456789abcdefghijk lmnopqrsTUVWXYZ\0"));
+    printf("%p\n", malloced);
+    printf("%s\n", malloced);
     free(malloced);
 }
