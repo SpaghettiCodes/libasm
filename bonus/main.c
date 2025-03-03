@@ -12,7 +12,6 @@ extern void ft_list_push_front(t_list **begin_list, void *data);
 int       	ft_list_size(t_list *begin_list);
 void        ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *));
 void        ft_list_sort(t_list **begin_list, int (*cmp)());
-void        func_run(void (*test)());
 
 t_list *ft_list_create(void *data) {
   t_list *ret = malloc(sizeof(t_list));
@@ -29,6 +28,10 @@ int ft_strlen(char *str) {
   return i;
 }
 
+int cmp_int(int *one, int *two) {
+  return (*one - *two);
+}
+
 int cmp_str(char *one, char *two) {
   return ft_strlen(one) != ft_strlen(two);
 }
@@ -41,6 +44,15 @@ void free_node(void *data) {
 
 void garbage() {
   printf("called from garbage 101\n");
+}
+
+void printIntList(t_list *start) {
+  while (start) 
+  {
+    printf("%d | ", *((int *) start->data));
+    start = start->next;
+  }
+  printf("\n");
 }
 
 int main()
@@ -74,12 +86,6 @@ int main()
   free(head->next);
   free(head);
 
-  printf("=== testing stuff ===\n");
-  printf("%d\n", cmp_str("one", "two")); // true
-  char *test = malloc(4);
-  free_node((void *) test);
-  func_run(garbage);
-
   printf("=== ft_list_remove_if ==\n");
   head = ft_list_create(one);
   ft_list_push_front(&head, two);
@@ -89,7 +95,27 @@ int main()
   printf("%d\n", ft_list_size(head)); // 1
   if (head) {
     printf("%s\n", (char *) head->data); // three
+    free(head);
   } else {
     printf("lmao head set to null\n");
   }
+
+  printf("=== ft_list_sort ==\n");
+  // int ints[] = {0,1,2,3,4,5,6,7};
+  // https://numbergenerator.org/randomnumberlist-1-10#!numbers=100&low=1&high=100&unique=true&csv=csv&oddeven=&oddqty=0&sorted=false&addfilters=
+  int ints[] = {69,66,63,99,87,6,13,37,23,35,81,80,2,29,28,94,95,44,32,67,16,12,47,74,84,89,41,56,98,17,7,25,48,100,72,70,46,91,71,11,34,14,27,24,20,40,26,79,22,36,76,61,86,57,59,43,93,54,78,42,62,82,5,85,51,10,1,21,52,75,60,31,8,55,50,58,3,38,53,39,65,96,83,77,19,92,97,49,4,30,18,64,15,45,90,33,88,68,9,73};
+  // int ints[] = {0, 1};
+  // int ints[] = {1, 0};
+  // int ints[] = {0, 1, 2};
+
+  head = ft_list_create(&ints[0]);
+  for (int i = 1; i < sizeof(ints) / sizeof(int); ++i) {
+    ft_list_push_front(&head, &ints[i]);
+  }
+  
+  printf("Before\n");
+  printIntList(head);
+  ft_list_sort(&head, cmp_int);
+  printf("After\n");
+  printIntList(head);
 }

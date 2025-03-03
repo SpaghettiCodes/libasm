@@ -1,4 +1,5 @@
 global ft_list_remove_if
+extern free
 
 ; rdi pointer to first node
 ; rsi reference data
@@ -49,7 +50,7 @@ loop:
   push r8
   push r9
 
-  mov qword rdi, [r8]
+  mov rdi, [r8]
   call rcx 
 
   pop r9
@@ -65,8 +66,7 @@ loop:
   mov r10, [r8 + 8]
   mov [r9 + 8], r10
 
-  mov r8, [r8 + 8]
-  jmp loop
+  jmp free_go_next
 
 reset:
   mov r9, r8
@@ -78,7 +78,30 @@ first_node:
   mov r10, [r8 + 8]
   mov [rdi], r10
 
-  mov r8, [r8 + 8]
+  jmp free_go_next
+
+free_go_next:
+  mov r10, [r8 + 8]
+  
+  ; free the node
+  push rdi
+  push rsi
+  push rdx
+  push rcx
+  push r10
+  push r9
+
+  mov rdi, r8
+  call free wrt ..plt 
+
+  pop r9
+  pop r10
+  pop rcx
+  pop rdx
+  pop rsi
+  pop rdi
+
+  mov r8, r10
   jmp loop
 
 end:
