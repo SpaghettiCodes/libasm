@@ -11,7 +11,10 @@ global ft_list_sort
 ; this is insertion sort
 
 ft_list_sort:
-  enter 0, 0
+  push rbp
+  mov rbp, rsp
+  ; theres enter 0, 0 , but its slower
+
   mov r9, [rdi]
   mov rdx, [r9 + 8]
 
@@ -87,7 +90,8 @@ next_loop:
   jmp loop
 
 end:
-  leave
+  pop rbp
+  ; theres leave, but i scare use since i didnt use enter
   ret
 
 section .note.GNU-stack noalloc noexec nowrite progbits

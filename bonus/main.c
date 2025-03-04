@@ -12,6 +12,9 @@ extern void ft_list_push_front(t_list **begin_list, void *data);
 int       	ft_list_size(t_list *begin_list);
 void        ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *));
 void        ft_list_sort(t_list **begin_list, int (*cmp)());
+long        ft_atoi_base(char *str, char *base);
+
+int         find(char *haystack, char needle);
 
 t_list *ft_list_create(void *data) {
   t_list *ret = malloc(sizeof(t_list));
@@ -57,6 +60,10 @@ void printIntList(t_list *start) {
 
 int main()
 {
+  printf("=== ft_atoi_base ==\n");
+  printf("%ld\n", ft_atoi_base(" \t\r\n   +++---483a465", "0123456789"));
+  printf("%ld\n", ft_atoi_base("abc12", "0123456789abcdef")); // 703506
+
   char *one = "one";
   char *two = "two";
   char *three = "three";
@@ -64,8 +71,6 @@ int main()
   char *def = "def";
 
   t_list *head = ft_list_create(one);
-  printf("%s\n", (char *) head->data);
-
   printf("=== ft_list_push_front ==\n");
   ft_list_push_front(&head, (void *) two);
   printf("%s\n", (char *) head->data);

@@ -11,9 +11,9 @@ extern free
 
 ft_list_remove_if:
   ; align stack frame, or some function crash when you try calling it
-  enter 0, 0
-  ; push rbp
-  ; mov rbp, rsp
+  push rbp
+  mov rbp, rsp
+  ; theres enter 0, 0 , but its slower
 
   xor r9, r9
   mov r8, [rdi]
@@ -105,9 +105,9 @@ free_go_next:
   jmp loop
 
 end:
-  leave
-  ; mov rbp, rsp
-  ; pop rbp
+  ; restore stack frame 
+  pop rbp
+  ; theres leave, but i scare use since i didnt use enter
   ret
 
 section .note.GNU-stack noalloc noexec nowrite progbits 
