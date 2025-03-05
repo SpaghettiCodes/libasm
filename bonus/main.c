@@ -61,6 +61,9 @@ void printIntList(t_list *start) {
 int main()
 {
   printf("=== ft_atoi_base ==\n");
+  printf("%ld\n", ft_atoi_base("123", "1")); // invalid
+  printf("%ld\n", ft_atoi_base("123", "45611")); // invalid
+  printf("%ld\n", ft_atoi_base("123", "0123+-")); // invalid
   printf("%ld\n", ft_atoi_base(" \t\r\n   +++---483a465", "0123456789"));
   printf("%ld\n", ft_atoi_base("abc12", "0123456789abcdef")); // 703506
 

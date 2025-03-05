@@ -80,10 +80,9 @@ first_node:
 
   jmp free_go_next
 
-free_go_next:
-  mov r10, [r8 + 8]
-  
+free_go_next:  
   ; free the node
+  push qword [r8 + 8]
   push rdi
   push rsi
   push rdx
@@ -100,8 +99,8 @@ free_go_next:
   pop rdx
   pop rsi
   pop rdi
+  pop r8
 
-  mov r8, r10
   jmp loop
 
 end:

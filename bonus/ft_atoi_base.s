@@ -2,11 +2,84 @@
 
 global ft_atoi_base
 
+; ==========================
+; CHECK_DUPLICATE
+; ==========================
 ; str   := rdi
+
+check_duplicate:
+  cmp [rdi], byte 0
+  je check_duplicate_end
+
+  mov sil, byte [rdi]
+  inc rdi
+  push rdi
+  call find
+  pop rdi
+  cmp rax, 0
+  jge check_duplicate_fail
+
+  jmp check_duplicate
+
+check_duplicate_end:
+  mov rax, 1
+  jmp check_duplicate_exit
+
+check_duplicate_fail:
+  mov rax, 0
+  jmp check_duplicate_exit
+
+check_duplicate_exit:
+  ret
+
+; ==========================
+; CHECK_BASE
+; ==========================
+; str   := rdi
+
+check_base:
+  ; empty or size of 1
+  push rdi
+  call strlen
+  pop rdi
+  cmp rax, 2
+  jl nope
+
+  ; check if base contains the same element twice
+  push rdi
+  call check_duplicate
+  pop rdi
+  cmp rax, 0
+  je nope
+  
+  ; has + symbol
+  mov sil, byte 45 ; '+' symbol
+  push rdi
+  call find
+  pop rdi
+  cmp rax, 0
+  jge nope
+
+  ; has - symbol
+  mov sil, byte 43 ; '-' symbol
+  push rdi
+  call find
+  pop rdi
+  cmp rax, 0
+  jge nope
+
+exit:
+  mov rax, 1
+  ret
+
+nope:
+  mov rax, 0
+  ret
 
 ; ==========================
 ; STRLEN
 ; ==========================
+; str   := rdi
 
 strlen:
     xor rax, rax ; reset return value to 0
@@ -48,15 +121,26 @@ stop:
 ; ==========================
 ; FT_ATOI_BASE
 ; ==========================
-
 ; str   := rdi
 ; base  := rsi
-
+; -------------------------
 ; accu     := rax
 ; base_len := rdx
 ; sign     := rcx
 
 ft_atoi_base:
+  push rdi
+  push rsi
+
+  mov rdi, rsi
+  call check_base
+
+  pop rsi
+  pop rdi
+
+  cmp rax, 0
+  je quit
+
   push rdi
   push rsi
 
@@ -73,10 +157,13 @@ ft_atoi_base:
 skip_space:
   cmp [rdi], byte 0x20 ; space
   je skip_space_next
+
   cmp [rdi], byte 0x09 ; tab
   je skip_space_next
+
   cmp [rdi], byte 0x0D ; cr (\n)
   je skip_space_next
+
   cmp [rdi], byte 0x0A ; line feed (\r)
   je skip_space_next
 
@@ -89,6 +176,7 @@ skip_space_next:
 determine_sign:
   cmp [rdi], byte 45 ; "-" symbol
   je flip_sign
+
   cmp [rdi], byte 43 ; "+" symbol
   je determine_sign_next
 
@@ -136,4 +224,6 @@ convert_loop_next:
 
 end:
   imul rax, rcx
+
+quit:
   ret
