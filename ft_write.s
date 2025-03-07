@@ -12,9 +12,6 @@ ft_write:
 ; and we need to set it ourselves
 ; if syscall failed, < 0 is returned, abs of this value is the errno to set
 
-; why the fuck does r10 not work
-; r9 works, r11 does not work
-
 error:
     neg rax
     push rax

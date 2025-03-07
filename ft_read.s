@@ -15,6 +15,8 @@ ft_read:
 ; why the fuck does r10 not work
 ; r9 works, r11 does not work
 
+; because r10 and r11 were clobbered you retard
+
 error:
     neg rax
     push rax
