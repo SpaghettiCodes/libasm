@@ -15,7 +15,7 @@ extern ssize_t ft_write(int fd, const char *buf, size_t count);
 extern ssize_t ft_read(int fd, char *buf, size_t count);
 extern char *ft_strdup(const char *s);
 
-#define BRUTE_FORCE_TESTS 100
+#define BRUTE_FORCE_TESTS 1000
 
 char random_char(int index) {
     return index + 32;
@@ -38,9 +38,6 @@ void test_StrLen() {
         "a",
         "ab",
         "abc",
-        "abcd",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris orci.",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam efficitur tristique lorem, eu iaculis nibh auctor eu. Maecenas quis orci pretium, semper orci id, tristique ex. In non massa non ipsum dignissim sodales non dignissim lectus. Fusce vel purus auctor, pretium nunc eu, ullamcorper nulla. Curabitur at diam nec eros tincidunt elementum nec eu magna. Praesent dolor massa, commodo in feugiat eu, convallis eu leo. Pellentesque pretium elementum magna nec euismod. Nulla sagittis, augue non tristique blandit, velit metus vestibulum lacus, a volutpat est leo vitae nulla. Etiam at ante velit. Donec suscipit purus tortor, id vehicula lorem eleifend ut. Aliquam at porta purus. Sed cras amet.",
     };
 
     for (unsigned int i = 0; i < sizeof(tests) / sizeof(char *); ++i) {
@@ -149,7 +146,8 @@ void test_StrCmp() {
         newCmpData("\x01", "\x01\x01"),
         newCmpData("\x01\x01", "\x01"),
         newCmpData("", "\x05\x01"),
-        newCmpData("\x05\x01", "")
+        newCmpData("\x05\x01", ""),
+        newCmpData("\xff", "")
     };
 
     for (unsigned int i = 0; i < sizeof(tests) / sizeof(char *); ++i) {
