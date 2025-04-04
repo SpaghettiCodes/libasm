@@ -16,6 +16,7 @@ ft_strdup:
     call malloc wrt ..plt ; wanna check for error here, oops
 
     ; rax now has the new malloced array
+    ; if return value is null, it failed, quit
     cmp rax, 0
     je stop
 
