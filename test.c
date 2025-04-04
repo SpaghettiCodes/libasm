@@ -137,6 +137,7 @@ t_cmpData *newCmpData(char *one, char *two) {
 void test_StrCmp() {
     int ok = 1;
     t_cmpData *tests[] = {
+        // normal testing
         newCmpData("", ""),
         newCmpData("", "\x01"),
         newCmpData("\x01", ""),
@@ -147,7 +148,14 @@ void test_StrCmp() {
         newCmpData("\x01\x01", "\x01"),
         newCmpData("", "\x05\x01"),
         newCmpData("\x05\x01", ""),
-        newCmpData("\xff", "")
+
+        // 255 schenanigans
+        // this checks if you extend your 0s properly
+        newCmpData("\xff", ""),
+        newCmpData("", "\xff"),
+        newCmpData("\xff", "\xff"),
+        newCmpData("\xff", "\xfe"),
+        newCmpData("\xfe", "\xff")
     };
 
     for (unsigned int i = 0; i < sizeof(tests) / sizeof(char *); ++i) {

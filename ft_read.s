@@ -12,11 +12,6 @@ ft_read:
 ; and we need to set it ourselves
 ; if syscall failed, < 0 is returned, abs of this value is the errno to set
 
-; why the fuck does r10 not work
-; r9 works, r11 does not work
-
-; because r10 and r11 were clobbered you retard
-
 error:
     neg rax
     push rax

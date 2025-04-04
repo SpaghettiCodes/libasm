@@ -22,7 +22,4 @@ error:
     mov rax, -1
     ret
 
-; check what the fuck is plt
-; https://stackoverflow.com/questions/28699032/assembly-coding-strdup-malloc-calling-in-shared-library/28699189#28699189
-
 section .note.GNU-stack noalloc noexec nowrite progbits
