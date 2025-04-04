@@ -18,6 +18,7 @@ eq:
 
 noteq:
     ; have to sign extend since strcmp expects an int return
+    ; update, dont do sign extend, just pad 0s
     movzx rax, byte [rdi + r10]
     movzx r10, byte [rsi + r10]
     sub rax, r10
