@@ -50,6 +50,8 @@ LIBASM_BONUS: $(asmBonusOut)
 
 re: fclean all
 
+re_bonus: fclean bonus
+
 clean:
 	rm -f $(asmout) $(asmBonusOut) $(cout) $(cBonusOut)
 
