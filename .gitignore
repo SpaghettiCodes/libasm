@@ -1,4 +1,5 @@
 .*
 ~.gitignore
 /notes
-*.out
+*.o
+out
