@@ -70,8 +70,6 @@ int main()
   char *one = "one";
   char *two = "two";
   char *three = "three";
-  char *abc = "abc";
-  char *def = "def";
 
   t_list *head = ft_list_create(one);
   printf("=== ft_list_push_front ==\n");
@@ -117,7 +115,7 @@ int main()
   // int ints[] = {0, 1, 2};
 
   head = ft_list_create(&ints[0]);
-  for (int i = 1; i < sizeof(ints) / sizeof(int); ++i) {
+  for (unsigned int i = 1; i < sizeof(ints) / sizeof(int); ++i) {
     ft_list_push_front(&head, &ints[i]);
   }
   

@@ -1,5 +1,3 @@
-; i hate this  i hate this  i hate this  i hate this  i hate this  i hate this 
-
 global ft_atoi_base
 
 ; ==========================
@@ -227,3 +225,5 @@ end:
 
 quit:
   ret
+
+section .note.GNU-stack noalloc noexec nowrite progbits
