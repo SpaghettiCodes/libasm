@@ -40,7 +40,7 @@ program_bonus: LIBASM_BONUS $(cBonusOut)
 	$(NASM) $(NASM_FLAGS) $< -o $@
 
 %.o: %.c
-	$(CC) $(CC_FLAGS) -c $< -o $@
+	$(CC) -c $< -o $@
 
 $(libasm): $(asmout)
 	ar rcs $@ $(asmout)

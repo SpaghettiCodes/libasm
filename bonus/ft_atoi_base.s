@@ -1,6 +1,65 @@
 global ft_atoi_base
 
 ; ==========================
+; IS_WHITESPACE
+; ==========================
+; char  := dil
+
+is_whitespace:
+  cmp dil, 0x20 ; space
+  je is_whitespace_yes
+
+  cmp dil, 0x09 ; tab
+  je is_whitespace_yes
+
+  cmp dil, 0x0A ; line feed (\r)
+  je is_whitespace_yes
+
+  cmp dil, 0x0B ; vertical feed (\v)
+  je is_whitespace_yes
+
+  cmp dil, 0x0C ; form feed (\f)
+  je is_whitespace_yes
+
+  cmp dil, 0x0D ; cr (\n)
+  je is_whitespace_yes
+
+  mov rax, 0
+  ret
+
+is_whitespace_yes:
+  mov rax, 1
+  ret
+
+; ==========================
+; CHECK_WHITESPACE
+; ==========================
+; str   := rdi
+
+check_whitespace:
+  cmp [rdi], byte 0
+  je check_whitespace_none
+
+  push rdi
+  mov dil, byte [rdi]
+  call is_whitespace
+  pop rdi
+  inc rdi
+
+  cmp rax, 1
+  je check_whitespace_found
+
+  jmp check_whitespace
+
+check_whitespace_none:
+  mov rax, 0
+  ret
+
+check_whitespace_found:
+  mov rax, 1
+  ret
+
+; ==========================
 ; CHECK_DUPLICATE
 ; ==========================
 ; str   := rdi
@@ -65,6 +124,13 @@ check_base:
   pop rdi
   cmp rax, 0
   jge nope
+
+  ; has white space symbol
+  push rdi
+  call check_whitespace
+  pop rdi
+  cmp rax, 1
+  je nope
 
 exit:
   mov rax, 1
@@ -153,16 +219,18 @@ ft_atoi_base:
   mov rcx, 1
 
 skip_space:
-  cmp [rdi], byte 0x20 ; space
-  je skip_space_next
+  push rdx
+  push rdi
+  push rsi
 
-  cmp [rdi], byte 0x09 ; tab
-  je skip_space_next
+  mov dil, byte [rdi]
+  call is_whitespace
+  
+  pop rsi
+  pop rdi
+  pop rdx
 
-  cmp [rdi], byte 0x0D ; cr (\n)
-  je skip_space_next
-
-  cmp [rdi], byte 0x0A ; line feed (\r)
+  cmp rax, 1
   je skip_space_next
 
   jmp determine_sign

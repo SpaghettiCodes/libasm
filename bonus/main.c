@@ -66,6 +66,8 @@ int main()
   printf("%ld\n", ft_atoi_base("123", "0123+-")); // invalid
   printf("%ld\n", ft_atoi_base(" \t\r\n   +++---483a465", "0123456789"));
   printf("%ld\n", ft_atoi_base("abc12", "0123456789abcdef")); // 703506
+  printf("%ld\n", ft_atoi_base("\t\n\r\v\f\r 4", "01234"));
+  printf("%ld\n", ft_atoi_base("10111", "\t541"));
 
   char *one = "one";
   char *two = "two";

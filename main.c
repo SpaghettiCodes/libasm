@@ -13,6 +13,17 @@ extern ssize_t ft_write(int fd, const char *buf, size_t count);
 extern ssize_t ft_read(int fd, char *buf, size_t count);
 extern char *ft_strdup(const char *s);
 
+int randomasstest(const char *s1, const char *s2) {
+    while (*s1 == *s2) {
+        if (*s1 == 0) {
+            return 0;
+        }
+        ++s1;
+        ++s2;
+    }
+    return (unsigned char) (*s1) - (unsigned char) (*s2);
+}
+
 int main() {
     printf("%d\n", ft_strlen("123456789"));
 
@@ -27,12 +38,19 @@ int main() {
     char *two = "test";
     char *three = "tes";
     char *four = "teste";
+
+    printf("retarded value = %d\n", '\xff');
+    printf("real test = %d\n", strcmp("\xff", ""));
+    printf("random test = %d\n", randomasstest("\xff", ""));
+
     printf("%d\n", strcmp(one, two));
     printf("%d\n", ft_strcmp(one, two));
     printf("%d\n", strcmp(one, three));
     printf("%d\n", ft_strcmp(one, three));
     printf("%d\n", strcmp(one, four));
     printf("%d\n", ft_strcmp(one, four));
+    printf("%d\n", strcmp("\xff", ""));
+    printf("%d\n", ft_strcmp("\xff", ""));
 
     int res = ft_write(1, "test\n", 5);
     printf("Wrote %d characters\n", res);
