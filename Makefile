@@ -24,7 +24,7 @@ NASM_FLAGS = -f elf64
 
 CC = gcc
 
-CC_FLAGS = -Wall -Wextra -Werror -Wno-format-zero-length
+CC_FLAGS = -Wall -Wextra -Werror
 
 LIB_FLAGS = -L. -lasm
 

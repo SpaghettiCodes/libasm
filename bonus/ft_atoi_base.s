@@ -21,7 +21,7 @@ is_whitespace:
   cmp dil, 0x0C ; form feed (\f)
   je is_whitespace_yes
 
-  cmp dil, 0x0D ; cr (\n)
+  cmp dil, 0x0D ; carriage return (\n)
   je is_whitespace_yes
 
   mov rax, 0

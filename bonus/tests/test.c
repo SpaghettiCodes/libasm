@@ -17,7 +17,7 @@ typedef struct s_list
 long        ft_atoi_base(char *str, char *base);
 extern void ft_list_push_front(t_list **begin_list, void *data);
 int       	ft_list_size(t_list *begin_list);
-void        ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *));
+void        ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(void *, void *), void (*free_fct)(void *));
 void        ft_list_sort(t_list **begin_list, int (*cmp)());
 
 #define BRUTE_FORCE_TESTS 1000
@@ -30,6 +30,15 @@ char *strdup(const char *src) {
     return dst;
 }
 
+int list_size(t_list *data) {
+    int i = 0;
+    while (data) {
+        ++i;
+        data = data->next;
+    }
+    return i;
+}
+
 t_list *ft_list_create(void *data) {
     t_list *ret = malloc(sizeof(t_list));
     ret->data = data;
@@ -38,11 +47,6 @@ t_list *ft_list_create(void *data) {
 }
 
 int cmp_int(int *one, int *two) {
-    return (*one - *two);
-}
-
-int printf_cmpInt(int *one, int *two) {
-    printf(""); // yes, this is intended, if you didnt align stack frame, your ft_list_remove_if will crash
     return (*one - *two);
 }
 
@@ -68,6 +72,51 @@ t_list *create_random_int_list(int listSize) {
             ret = next;
         }
         prev = next;
+    }
+    return ret;
+}
+
+int generateLessThanFiveHundred() {
+    return rand() % 500;
+}
+
+int generateMoreThanFiveHundred() {
+    return rand() % 10000 + 501;
+}
+
+t_list *create_random_lessthan_list(int lessThanCount, int moreThanCount) {
+    int i = 0;
+    int total = lessThanCount + moreThanCount;
+    t_list *ret = NULL;
+    t_list *prev = NULL;
+
+    while (i < total) {
+        int value;
+        if (lessThanCount == 0) {
+            value = generateMoreThanFiveHundred();
+            moreThanCount -= 1;
+        } else if (moreThanCount == 0) {
+            value = generateLessThanFiveHundred();
+            lessThanCount -= 1;
+        } else {
+            if (rand() % 2) {
+                value = generateLessThanFiveHundred();
+                lessThanCount -= 1;
+            } else {
+                value = generateMoreThanFiveHundred();
+                moreThanCount -= 1;
+            }
+        }
+
+        t_list *next = ft_list_create(create_intNode(value));
+        if (prev) {
+            prev->next = next;
+        }
+        if (!ret) {
+            ret = next;
+        }
+        prev = next;
+        i++;
     }
     return ret;
 }
@@ -283,10 +332,124 @@ void test_ft_ListSort() {
     }
 }
 
+int functionThatAlwaysReturnTrue(void *one, void *data_ref) {
+    (void) one;
+    (void) data_ref;
+    return 0;
+}
+
+int functionThatAlwaysReturnFalse(void *one, void *data_ref) {
+    (void) one;
+    (void) data_ref;
+    return 1;
+}
+
+int intIsEqual(void *one, void *data_ref) {
+    return *(int *) one != *(int *) data_ref;
+}
+
+// returns 0 if its one is more than data_ref
+int intLessThan(void *one, void *data_ref) {
+    return *(int *) one < *(int *) data_ref;
+}
+
+void test_ft_RemoveIf() {
+    int ok = 1;
+
+    // null test
+    ft_list_remove_if(NULL, NULL, functionThatAlwaysReturnTrue, free_node);
+    
+    // empty test
+    t_list *empty = NULL;
+    ft_list_remove_if(&empty, NULL, functionThatAlwaysReturnTrue, free_node);
+
+    // given a random list of stuff, remove everything test
+    t_list *random = create_random_int_list((rand() % 1000) + 1);
+    ft_list_remove_if(&random, NULL, functionThatAlwaysReturnTrue, free_node);
+    // shouldnt have any leaks
+    if (random != NULL) {
+        printf("ERROR! ft_list_remove_if not removing properly\n");
+        ok = 0;
+        // bruh
+        free_list(random);
+    }
+
+    // given a random list of stuff, do not remove anything
+    int size = (rand() % 1000) + 1;
+    random = create_random_int_list(size);
+    ft_list_remove_if(&random, NULL, functionThatAlwaysReturnFalse, free_node);
+    if (random == NULL || list_size(random) != size) {
+        printf("ERROR! ft_list_remove_if removed something\n");
+        ok = 0;
+    }
+    free_list(random);
+
+    // given a list, remove the first element only
+    int one = 1;
+    t_list *firstElem = ft_list_create(create_intNode(1));
+    t_list *firstElem_b = ft_list_create(create_intNode(2));
+    firstElem->next = firstElem_b;
+    ft_list_remove_if(&firstElem, &one, intIsEqual, free_node);
+    if (list_size(firstElem) == 2) {
+        printf("ERROR! ft_list_remove_if didnt remove anything\n");
+        ok = 0;
+    } else {
+        if (firstElem == NULL || *(int *)firstElem->data != 2) {
+            printf("ERROR! ft_list_remove_if removed unintended target\n");
+            ok = 0;
+        }
+    }
+    free_list(firstElem);
+
+    // given a list, remove the last element only
+    t_list *lastElem = ft_list_create(create_intNode(2));
+    t_list *lastElem_b = ft_list_create(create_intNode(1));
+    lastElem->next = lastElem_b;
+    ft_list_remove_if(&lastElem, &one, intIsEqual, free_node);
+    if (list_size(lastElem) == 2) {
+        printf("ERROR! ft_list_remove_if didnt remove anything\n");
+        ok = 0;
+    } else {
+        if (lastElem == NULL || *(int *)lastElem->data != 2) {
+            printf("ERROR! ft_list_remove_if removed unintended target\n");
+            ok = 0;
+        }
+    }
+    free_list(lastElem);
+
+    // given a list, remove the middle element
+    t_list *middleElem = ft_list_create(create_intNode(2));
+    t_list *middleElem_b = ft_list_create(create_intNode(1));
+    t_list *middleElem_c = ft_list_create(create_intNode(3));
+    middleElem->next = middleElem_b;
+    middleElem_b->next = middleElem_c;
+    ft_list_remove_if(&middleElem, &one, intIsEqual, free_node);
+    if (list_size(middleElem) == 3) {
+        printf("ERROR! ft_list_remove_if didnt remove anything\n");
+        ok = 0;
+    } else {
+        if (
+            middleElem == NULL || 
+            list_size(middleElem) != 2 ||
+            *(int *)middleElem->data != 2 ||
+            *(int *)middleElem->next->data != 3
+        ) {
+            printf("ERROR! ft_list_remove_if removed unintended target\n");
+            ok = 0;
+        }
+    }
+    free_list(middleElem);
+
+    if (ok) {
+        printf("ft_remove_if OK!\n");
+    }
+}
+
 int main() {
     srand(time(NULL));
     // just use main.c for ft_atoi_base
     test_ft_pushFront();
     test_ft_ListSize();
+    test_ft_RemoveIf();
     test_ft_ListSort();
 }

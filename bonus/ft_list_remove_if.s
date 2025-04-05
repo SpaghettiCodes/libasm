@@ -15,6 +15,9 @@ ft_list_remove_if:
   mov rbp, rsp
   ; theres enter 0, 0 , but its slower
 
+  cmp rdi, 0
+  je end
+
   xor r9, r9
   mov r8, [rdi]
 
