@@ -8,7 +8,7 @@ asmBonusOut = $(patsubst %.s,%.o,$(asmBonus))
 
 libasm = libasm.a
 
-testCFile = main.c
+testCFile = test.c
 
 cfile = ./tests/${testCFile}
 
