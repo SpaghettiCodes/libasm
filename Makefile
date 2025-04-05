@@ -8,9 +8,11 @@ asmBonusOut = $(patsubst %.s,%.o,$(asmBonus))
 
 libasm = libasm.a
 
-cfile = ./tests/test.c
+testCFile = main.c
 
-cBonusFile = ./bonus/tests/test.c
+cfile = ./tests/${testCFile}
+
+cBonusFile = ./bonus/tests/${testCFile}
 
 cout = $(patsubst %.c,%.o,$(cfile))
 

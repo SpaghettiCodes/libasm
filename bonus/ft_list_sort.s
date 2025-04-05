@@ -60,7 +60,7 @@ innerloop:
   pop rdi
 
   cmp eax, 0 ; cmp function returns int
-  jl insert
+  jle insert
 
 next_innerloop:
   ; check next
