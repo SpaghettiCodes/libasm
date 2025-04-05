@@ -8,9 +8,9 @@ asmBonusOut = $(patsubst %.s,%.o,$(asmBonus))
 
 libasm = libasm.a
 
-cfile = test.c
+cfile = ./tests/test.c
 
-cBonusFile = ./bonus/main.c
+cBonusFile = ./bonus/tests/test.c
 
 cout = $(patsubst %.c,%.o,$(cfile))
 
@@ -24,23 +24,25 @@ NASM_FLAGS = -f elf64
 
 CC = gcc
 
-CC_FLAGS = -Wall -Wextra -Werror -L. -lasm
+CC_FLAGS = -Wall -Wextra -Werror -Wno-format-zero-length
+
+LIB_FLAGS = -L. -lasm
 
 all: program
 
 bonus: $(libasm) program_bonus
 
 program: $(libasm) $(cout)
-	$(CC) $(cout) $(CC_FLAGS) -o $(outfile)
+	$(CC) $(cout) $(LIB_FLAGS) -o $(outfile)
 
 program_bonus: LIBASM_BONUS $(cBonusOut)
-	$(CC) $(cBonusOut) $(CC_FLAGS) -o $(outfile)
+	$(CC) $(cBonusOut) $(LIB_FLAGS) -o $(outfile)
 
 %.o: %.s
 	$(NASM) $(NASM_FLAGS) $< -o $@
 
 %.o: %.c
-	$(CC) -c $< -o $@
+	$(CC) $(CC_FLAGS) -c $< -o $@
 
 $(libasm): $(asmout)
 	ar rcs $@ $(asmout)

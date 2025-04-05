@@ -15,6 +15,10 @@ ft_list_sort:
   mov rbp, rsp
   ; theres enter 0, 0 , but its slower
 
+  ; if given null, quit
+  cmp rdi, 0
+  je end
+
   ; if head is empty, quit
   cmp [rdi], dword 0
   je end

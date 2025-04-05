@@ -247,7 +247,7 @@ int main() {
     test_StrLen();
     test_StrCpy();
     test_StrCmp();
-    // pray write works
-    // pray read works
+    // just use main.c for write
+    // just use main.c for read
     test_StrDup();
 }
